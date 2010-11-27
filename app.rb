@@ -13,8 +13,8 @@ get '/' do
 end
 
 get '/soiree/:id' do
-  current = Event.get(params[:id])
-  if current == nil
+  @soiree = Event.get(params[:id])
+  if @soiree == nil
     # Event not found, serve some page saying it doesn't exist
     redirect '/'
   else 
