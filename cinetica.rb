@@ -14,5 +14,5 @@ get '/flicks/:id' do
   content_type :json
   dayparam = params[:day] || "sat"
   @api = RestClient::Resource.new CINETICA_URL
-  body @api["/movies/#{params[:id]}.json?day=#{dayparam}"].get.body
+  body @api["/movie/#{params[:id]}.json?day=#{dayparam}"].get.body
 end
