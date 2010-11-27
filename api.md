@@ -38,6 +38,13 @@ Soiree
 
 JSON
 ------
+{
+  flick: (cinetica)
+  food: (directly from yellow pages)
+  where:
+  when:
+}
+
 
 ### Event
 

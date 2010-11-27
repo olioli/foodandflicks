@@ -18,8 +18,9 @@ body {
 	line-height: 24px;
 	text-align: left;
 /*	margin: 24px 1.5% 24px 0;*/
-	margin: 48px;
+	padding: 48px;
 	color: #2D2D2D;
+/*	background: #eee url("http://www.apple.com/home/elements/gradient_texture20101116.jpg") repeat-x;*/
 }
 
 html>body {

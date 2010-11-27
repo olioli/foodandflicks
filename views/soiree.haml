@@ -1,8 +1,34 @@
 / @soiree has the hash
+- flick = @soiree["flick"]
+- poster_url = flick["posters"][0]["href"]
+- film_plot = flick["plot"]
+- film_where = @soiree["where"]
+- film_when = @soiree["when"]
+- film_food = @soiree["food"]
+- film_title = flick["title"]
 
-
-/ twitter stuff
-#share-buttons
-  %a{:href => "http://twitter.com/share", :class="twitter-share-button", :"data-url" => "http://foodandflicks.ca/", :"data-text" => "Join me for food & flicks! #foodandflicks", :"data-count"=>"none", :"data-via"=>"foodandflicksca"}<
-    Pull my friends!
-  %script{ :type =>"text/javascript", :src => "http://platform.twitter.com/widgets.js" }
+.result
+  %img.poster{:src => "#{poster_url}"}/
+  %h2 #{film_title}
+  %p #{film_plot}
+  %div{:style => "clear:both;margin-top:1.5em"}
+    %span.quiet Where:
+    %strong #{film_where}
+    %br/
+    %span.quiet When:
+    %strong #{film_when}
+    %br/
+    %span.quiet After:
+    %strong #{film_food}
+    %br/
+  %br/
+  / twitter stuff
+  #share-buttons
+    %a{:href => "http://twitter.com/share", :class="twitter-share-button", :"data-url" => "http://foodandflicks.ca/", :"data-text" => "#{film_title} @ #{film_where} - Join me for food & flicks! #foodandflicks http://foodandflicks.ca/soiree/#{@soiree.id}", :"data-count"=>"none", :"data-via"=>"foodandflicksca"}<
+      Pull my friends!
+    %script{ :type =>"text/javascript", :src => "http://platform.twitter.com/widgets.js" }
+    
+:javascript
+  $(document).ready(function() {
+  	$("select, input:checkbox, input:radio, input:button, input:submit").uniform();
+  });
