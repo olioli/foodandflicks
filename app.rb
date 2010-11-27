@@ -5,7 +5,14 @@ require 'model'
 require 'rest-client'
 
 get '/' do
-  "Yo dawg, I hear you like dinner and a movie so I put a dinner in your movie so you could dine while you movies."
+  haml :index
+end
+
+get '/soiree/:id' do
+  current = Event.get(params[:id])
+  if current == nil
+    redirect '/'
+  end
 end
 
 #get '/create' do
