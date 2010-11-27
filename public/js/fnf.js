@@ -89,7 +89,7 @@ function pickTime(){
 function flickOk(){
   // Update selection with time and theater
   var t = $(".time");
-  t.hide();
+  ("#theater").hide();
   
   liveFlick.time = $('#timePicker').val();
   
