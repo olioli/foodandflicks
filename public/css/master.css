@@ -1,0 +1,9 @@
+#chooser #flicks{
+  width: 90%;
+}
+
+#chooser #flicks li{
+  display: inline-block;
+  width: 95;
+  border: solid 5px #CCC;
+}

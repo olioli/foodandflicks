@@ -40,12 +40,13 @@ $(function(){
                                       console.debug(flick.title)
                                       $('<li>').addClass('flick')
                                                .appendTo('#flicks')
-                                               .html(flick.title)
                                                .click(flk.select)
                                                .data('f', flick )
                                                .append('<img>')
                                                .find('img')
-                                               .attr('src', flick.thumbnail)
+                                                .attr(  { src   : flick.thumbnail
+                                                        , title : flick.title
+                                                        } );
                                     } );
       
                   }
