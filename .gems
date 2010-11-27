@@ -1,2 +1,6 @@
 sinatra
 haml
+data_mapper
+dm-postgres-adapter
+json
+rest-client
