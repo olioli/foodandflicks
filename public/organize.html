@@ -68,21 +68,23 @@
 			<option>13:00</option>
 		</select>
 		
+		<input type="button" value="Pick">
+		
 	</div>
 	
 	<div class="food">
 		
 		<a href="#">← Back to movies</a>
 		
-		<h2>2. Pick a restaurant</h2>
+		<h2>2. Pick a restaurant nearby</h2>
 		
 		<ul>
 			<li>
-				<input type="checkbox" id="3">
+				<input type="radio" id="3" name="food">
 				<label for="3">Maison du Bulgogi<span class="quiet">, 5555 rue des Champs</span></label>
 			</li>
 			<li>
-				<input type="checkbox" id="4">
+				<input type="radio" id="4" name="food">
 				<label for="4">Sushi Shop<span class="quiet">, 5563 rue des Champs</span></label>
 			</li>
 		</ul>
@@ -100,7 +102,9 @@
 </form>
 
 <script>
-	$("select, input:checkbox, input:radio, input:button, input:submit").uniform();
+	$(document).ready(function() {
+		$("select, input:checkbox, input:radio, input:button, input:submit").uniform();
+	});
 </script>
 
 </body>
