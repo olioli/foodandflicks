@@ -19,33 +19,17 @@ get '/soiree/:id' do
     # Event not found, serve some page saying it doesn't exist
     redirect '/'
   else 
-    "showing page with json string #{current.jsonstring}"
+    haml :soiree, :format => :html5, :page_id => 'soiree'
   end
 end
 
 post '/soiree' do
-
+  @b = request.body.read
   begin
-    @b = request.body.read
-    puts @b.class
-    @parsed_object = JSON.parse(@b)
-    puts @parse_object.class
-    #newsoiree = Event.new
-    #@parsed_object['id'] = newsoiree.id
-    #newsoiree.jsonstring = @parsed_object.to_json
-    #newsoiree.save
-    #puts "create #{newsoiree.id} with id #{newsoiree.jsonstring}"
+    @newsoiree = Event.create(:jsonstring => @b)
+    puts "LOG :: Created #{@newsoiree.id} with id #{@newsoiree.jsonstring}"
   rescue Exception => e 
-    puts "there was a fuck up #{@b}"
+    puts "LOG :: There was a fuck up #{@b}"
     e
   end
 end
-
-#get '/create' do
-#  e = Event.create(:jsonstring => "WOWOWOWOW")
-#  e
-#end
-
-#get '/show' do`
-#  Event.first().jsonstring
-#end
