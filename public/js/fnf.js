@@ -14,7 +14,7 @@ function getFlicks( ){
              , function( data ){
                   
                   showFlicks( data.filter(function(f){ return f.thumbnail; })
-                                 .slice(0,18) );    
+                                 .slice(0,16) );    
                 } );
 }
 
@@ -23,7 +23,7 @@ function showFlicks( flicks ){
   flicks.forEach( function( flick ){
                     console.debug(flick.title)
                     $('<li>').addClass('flick')
-                             .appendTo('#flicks')
+                             .appendTo('.flicks ul')
                              .append('<img>')
                              .find('img')
                                 .data('f', flick )
@@ -47,19 +47,53 @@ function showTheater( flick ){
   
   
 }
+
+var liveFlick = null;
   
 function flickHtml( flick){
-  var html = ''
+  liveFlick = flick;
+  var html = ['<div class="time">'
+		         ,'<a class="close" href="">Close</a>'
+		         ,'<img src="', flick.thumbnail, '">'
+		         ,'<h3>',flick.title,'</h3>'
+		         ,'<p>',flick.plot,'</p>'
+		         ,'<br>Pick a time:<select onclick="pickTime();">'
+		         , flick.theaters.reduce(function(a,t){ 
+		              return '<option value="'+t.href.slice(t.href.lastIndexOf('/'))+':'+t.times.join(',')+'">'+a+t.name+'</option>' 
+		           }
+		           ,'') 
+		         , '<select id="timePicker" onclick="flickTimePicked()"><option>19:15</option><option>21:00</option></select>'
+		         , '<button id="flickOk" onclick="flickOk()">Ok</button>'
+		         , '</div>'].join('');
   
   
   return html;
 } 
   
+function pickTime(){
+  // This is scoped
+  var theater = $(this).value.split(':')
+    , id      = theater[0];      
+  
+  theater[1].split(',').forEach(function(time){
+    $('#timePicker').append('<option>')
+                    .attr('value', time)
+                    .html(time);
+  });
+  
+  liveFlick.theater = id;
+
+}  
+
+
 function flickOk(){
   // Update selection with time and theater
+  var t = $(".time");
+  t.hide();
   
+  liveFlick.time = $('#timePicker').val();
   
-  
+  console.debug(liveFlick);  
 }
 
 function getFood( ){
