@@ -12,7 +12,6 @@ get '/' do
   haml :index, :format => :html5, :page_id => 'index'
 end
 
-
 get '/soiree/:id' do
   current = Event.get(params[:id])
   if current == nil
@@ -24,10 +23,11 @@ get '/soiree/:id' do
 end
 
 post '/soiree' do
-  @b = request.body.read
+  @b = params[:json]
   begin
     @newsoiree = Event.create(:jsonstring => @b)
     puts "LOG :: Created #{@newsoiree.id} with id #{@newsoiree.jsonstring}"
+    redirect "/soiree/#{@newsoiree.id}"
   rescue Exception => e 
     puts "LOG :: There was a fuck up #{@b}"
     e
