@@ -5,7 +5,8 @@ require 'model'
 require 'rest-client'
 
 get '/' do
-  haml :index, :format => :html5, :page_id => 'index'
+  #haml :index, :format => :html5, :page_id => 'index'
+  redirect '/index.html'
 end
 
 get '/soiree/:id' do
