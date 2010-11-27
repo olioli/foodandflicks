@@ -3,14 +3,15 @@ require 'sinatra'
 require 'model'
 require 'rest_client'
 require 'json'
+require 'haml'
 
 require 'cinetica'
 require 'yellow'
 
 get '/' do
-  #haml :index, :format => :html5, :page_id => 'index'
-  redirect '/index.html'
+  haml :index, :format => :html5, :page_id => 'index'
 end
+
 
 get '/soiree/:id' do
   current = Event.get(params[:id])
@@ -24,6 +25,6 @@ end
 #  e
 #end
 
-#get '/show' do
+#get '/show' do`
 #  Event.first().jsonstring
 #end

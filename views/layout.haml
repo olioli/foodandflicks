@@ -3,9 +3,13 @@
   %head
     %title=@title
     %link{:href => 'css/master.css', :rel => 'stylesheet', :type => 'text/css'}
+    
+    %script{:type => 'text/javascript', :src => 'js/jquery-1.4.4.min.js'}
+    %script{:type => 'text/javascript', :src => 'js/soiree.js'}
+    %script{:type => 'text/javascript', :src => 'js/fnf.js'}
   %body{ :class => @page_id }
     #header
       %h1 [logo in bg] Food & Flicks
         
     #body
-      =yield_body
+      =yield
