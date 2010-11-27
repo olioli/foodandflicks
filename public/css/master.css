@@ -1,3 +1,156 @@
+/* -webkit-font-smoothing: antialiased; */
+/* text-rendering: optimizeLegibility; */
+
+/* 6 (0.375), 7 (0.4375), 8 (0.5), 9 (0.5625), 10 (0.625), 11 (0.6875), 12 (0.75), 14 (0.875),
+   16 (1), 18 (1.125), 21 (1.3125), 24 (1.5), 36 (2.25), 48 (3), 60 (3.75), 72 (4.5)  px (em) */
+
+html {
+	background-color: #ECECEC;
+}
+
+body {
+	font-size: 100%; /* 16px */
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size-adjust: none;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	line-height: 24px;
+	text-align: left;
+/*	margin: 24px 1.5% 24px 0;*/
+	margin: 48px;
+	color: #2D2D2D;
+}
+
+html>body {
+	font-size: 16px;
+}
+
+h1 { font-weight: bold; }
+
+h1, h2, h3 { margin: 0; line-height: 1.5; }
+
+a {
+	text-decoration: none;
+	color: #c00;
+}
+
+h1 { font-size: 24px; }
+h2 { font-size: 21px; }
+h3 { font-size: 18px; }
+
+h1 {
+	font-size: 48px;
+	font-weight: bold;
+	width: 400px;
+	height: 69px;
+	text-indent: -999px;
+	overflow: hidden;
+	background: url("../img/logo.png") no-repeat;
+}
+
+h2, h3 { font-weight: bold; }
+
+/* BASE */
+
+li { position: relative; }
+
+p.first {
+	padding-top: 23px;
+	border-top: 2px solid #000;
+}
+
+/* LINKS */
+
+a {
+	color: #4272DB;
+	text-decoration: none;
+}
+
+.flicks,
+.food,
+.poll {
+	clear: left;
+	padding-top: 1.5em;
+}
+
+.flicks ul,
+.food ul {
+	clear: left;
+	padding-top: 1.5em;
+}
+
+.flicks ul li {
+	float: left;
+	-moz-box-shadow:0 0 10px #CCCCCC;
+	background-color:white;
+	border:1px solid #CCCCCC;
+	padding:11px;
+	display:block;
+	float:left;
+	margin:0 12px 12px 0;
+}
+
+.flicks ul li a {
+	display: block;
+	height: 140px;
+}
+
+.flicks ul li a img {
+	height: 140px;
+	width: 95px;
+}
+
+.quiet {
+	color: #999;
+}
+
+.time {
+	-moz-box-shadow:0 0 15px #999 !important;
+	background:url("http://readon.ly/img/highlight-gradient.png") repeat-x scroll 0 0 #FFFF00;
+/*	color:#999900;*/
+	font-family:"Lucida Grande","Lucida Sans Unicode",sans-serif;
+	font-size:16px;
+	left:50%;
+	line-height:24px;
+	margin-left:-300px;
+	margin-top:-200px;
+	padding:1em;
+	position:absolute;
+	top:50%;
+	width:600px;
+	z-index:255;
+}
+
+.time .close {
+	background:url("http://images.apple.com/global/elements/close_button.png") no-repeat scroll 0 0 transparent;
+	cursor:pointer;
+	display:block;
+	height:30px;
+	outline:medium none;
+	overflow:hidden;
+	position:absolute;
+	right:-10px;
+	text-indent:-9999px;
+	top:-10px;
+	width:30px;
+	z-index:20001;
+}
+
+.flicks ul li:hover {
+	-moz-box-shadow: 0 0 10px #999;
+	-webkit-box-shadow: 0 0 10px #999;
+	box-shadow: 0 0 10px #999;
+}
+
+.time img {
+	float: left;
+	margin-right: 1em;
+}
+.time p {
+	margin-left: 112px;
+}
+
 #chooser #flicks{
   width: 90%;
 }
