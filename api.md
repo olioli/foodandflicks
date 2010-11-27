@@ -20,9 +20,10 @@ Food & Flicks
 -------------
 
 * /soiree
+    * POST creates the events
     * /{id} 
         * GET returns the event
-        *
+
         
         
         
