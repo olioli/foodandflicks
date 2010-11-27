@@ -80,7 +80,8 @@ a {
 	padding-top: 1.5em;
 }
 
-.flicks ul li {
+.flicks ul li,
+.poster {
 	float: left;
 	-moz-box-shadow:0 0 10px #CCCCCC;
 	background-color:white;
@@ -165,3 +166,7 @@ a {
 .highlight{
   border-color: #FC0 !important;
 }
+
+div.selector span { width: 100px; }
+
+.result { margin-top: 1.5em; }

@@ -22,80 +22,25 @@
 <body>
 
 <h1>Food &amp; Flicks</h1>
-
-<form>
-
-	<div class="flicks">
-		
-		<h2>1. Pick a movie</h2>
-		
-		<ul>
-		
-		</ul>
 	
-		<!-- <input type="submit" value="Next"> -->
+	<div class="result">
 		
-	</div>
-<!--	
-	<div class="time">
-		
-		<a class="close" href="">Close</a>
-		
-		<img src="http://cineti.ca/poster/41030_thumb.jpg">
-		<h3>10 1/2</h3>
+		<img class="poster" src="http://cineti.ca/poster/41030_thumb.jpg">
+		<h2>1O 1/2</h2>
 		<p>Le film raconte l'histoire de Tommy, un enfant de 10 ans et demi bien connu des services sociaux. Cet enfant trouble, rebelle à l'autorité comme à l'affection, est jugé irrécupérable par la plupart des éducateurs. Seul Gilles, son nouvel éducateur, entrevoit une lueur d'espoir dans le regard de cet enfant qui ne communique que par la violence... Est-ce le parcours de la dernière chance de Tommy?</p>
 		
+		<div style="clear:both;margin-top:1.5em">
+			<span class="quiet">Where:</span> <strong>AMC Forum 22</strong><br>
+			<span class="quiet">When:</span> <strong>Tuesday</strong><br>
+			<span class="quiet">After:</span> <strong>Maison du Bulgogi</strong><br>
+		</div>
+		
 		<br>
-		Pick a time:
 		
-		<select>
-			<option>AMC</option>
-			<option>Beaubien</option>
-		</select>
-		
-		<select>
-			<option>Monday</option>
-			<option>Tuesday</option>
-		</select>
-		
-		<select>
-			<option>12:00</option>
-			<option>13:00</option>
-		</select>
-		
-		<input type="button" value="Pick">
-		
-	</div>
--->	
-	<div class="food">
-		
-		<a href="#">← Back to movies</a>
-		
-		<h2>2. Pick a restaurant nearby</h2>
-		
-		<ul>
-			<li>
-				<input type="radio" id="3" name="food">
-				<label for="3">Maison du Bulgogi<span class="quiet">, 5555 rue des Champs</span></label>
-			</li>
-			<li>
-				<input type="radio" id="4" name="food">
-				<label for="4">Sushi Shop<span class="quiet">, 5563 rue des Champs</span></label>
-			</li>
-		</ul>
-		
-		<!-- <input type="button" value="Back"> -->
+		<input type="button" value="Share on Twitter">
 		
 	</div>
 	
-	<div class="poll">
-		
-		<input type="submit" value="Create an event">
-	
-	</div>
-	
-</form>
-
 <script>
 	$(document).ready(function() {
 		$("select, input:checkbox, input:radio, input:button, input:submit").uniform();
