@@ -57,13 +57,15 @@ function flickHtml( flick){
 		         ,'<img src="', flick.thumbnail, '">'
 		         ,'<h3>',flick.title,'</h3>'
 		         ,'<p>',flick.plot,'</p>'
-		         ,'<br>Pick a time:<select onclick="pickTime();">'
+		         ,'<br>Pick a time:<select id="bob" onselect="pickTime();">'
 		         , flick.theaters.reduce(function(a,t){ 
-		              return '<option value="'+t.href.slice(t.href.lastIndexOf('/'))+':'+t.times.join(',')+'">'+a+t.name+'</option>' 
+		              
+		              console.debug(theaters);
+		              return '<option value="amc">'+a+t.name+'</option>' 
 		           }
 		           ,'') 
-		         , '<select id="timePicker" onclick="flickTimePicked()"><option>19:15</option><option>21:00</option></select>'
-		         , '<button id="flickOk" onclick="flickOk()">Ok</button>'
+		         , '</br><select id="timePicker" ><option>19:15</option><option>21:00</option></select>'
+		         , '<button type="button" id="flickOk" onclick="allo();">Ok</button>'
 		         , '</div>'].join('');
   
   
@@ -72,7 +74,8 @@ function flickHtml( flick){
   
 function pickTime(){
   // This is scoped
-  var theater = $(this).value.split(':')
+ console.debug( $("#bob").val() )
+  var theater = $("#bob").val().split(':')
     , id      = theater[0];      
   
   theater[1].split(',').forEach(function(time){
@@ -86,25 +89,36 @@ function pickTime(){
 }  
 
 
-function flickOk(){
+function allo(){
   // Update selection with time and theater
   var t = $(".time");
-  ("#theater").hide();
+  $("#theater").hide();
   
   liveFlick.time = $('#timePicker').val();
   
+  getFood();
   console.debug(liveFlick);  
 }
 
 function getFood( ){
   
-  $.getJSON('/food/' + selection.flick.theater )
+  $.getJSON('/food/amc' 
+            , showFood )
   
 }
 
-function showFood(){
-  
-  
+function showFood( data ){
+ console.debug(data) 
+ $("#food").html(['<a href="#">← Back to movies</a><h2>2. Pick a restaurant nearby</h2><ul>'
+		              , data.listings.reduce(function(acc, r){
+		                  return [
+		                  '<li>'
+				,'<input type="radio" id="3" name="food">'
+				,'<label for="3">', r.name,'<span class="quiet"> on ',r.address.street,' </span></label>'
+			  ,'</li>'
+		                  ].join('');
+		                  },'')
+		              , '</ul>'].join('')).show();
   
 }
   // Run app
