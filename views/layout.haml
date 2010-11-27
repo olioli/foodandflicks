@@ -1,0 +1,11 @@
+!!! Strict
+%html
+  %head
+    %title=@title
+    %link{:href => 'css/master.css', :rel => 'stylesheet', :type => 'text/css'}
+  %body{ :class => @page_id }
+    #header
+      %h1 [logo in bg] Food & Flicks
+        
+    #body
+      =yield_body
