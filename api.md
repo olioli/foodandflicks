@@ -4,15 +4,15 @@ Food And Flicks API
 Movie
 -----
 
-*   /movies
-    * GET : All movie (Should contain thumbs etc)
+*   /flicks
+    * GET : All movies (Should contain thumbs etc)
     * / 
 
 
 Restaurant
 ----------
 
-* /restaurants
+* /food
     * GET ?nearby={lnglat or postal} List of restaurants
     
 
@@ -24,8 +24,6 @@ Food & Flicks
     * /{id} 
         * GET returns the event
 
-        
-        
         
         
 Soiree
@@ -55,7 +53,7 @@ JSON
                     , flick   : {} 
                     , food    : {}
                     , picks   : [ "email"] } ]  
-    }`     
+    }   
 
     
 ### Flick
