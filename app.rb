@@ -1,8 +1,8 @@
 require 'rubygems'
-require 'json'
 require 'sinatra'
 require 'model'
-require 'rest-client'
+require 'rest_client'
+require 'json'
 
 get '/' do
   #haml :index, :format => :html5, :page_id => 'index'
