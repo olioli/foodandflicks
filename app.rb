@@ -13,7 +13,7 @@ get '/soiree/:id' do
   current = Event.get(params[:id])
   if current == nil
     # Event not found, serve some page saying it doesn't exist
-    redirect '/'
+    redirect '/soiree/create'
   else 
     current.jsonstring
   end
