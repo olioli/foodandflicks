@@ -4,6 +4,11 @@
 
 #chooser #flicks li{
   display: inline-block;
-  width: 95;
+  width: 95px;
   border: solid 5px #CCC;
+  margin: 5px;
+}
+
+.highlight{
+  border-color: #FC0 !important;
 }
