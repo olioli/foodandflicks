@@ -4,6 +4,9 @@ require 'model'
 require 'rest_client'
 require 'json'
 
+require 'cinetica'
+require 'yellow'
+
 get '/' do
   #haml :index, :format => :html5, :page_id => 'index'
   redirect '/index.html'
