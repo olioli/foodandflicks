@@ -25,15 +25,8 @@ end
 
 post '/soiree' do
   begin
-    @last = Event.last()
-    id = nil
-    if @last == nil
-      id = 1
-    else
-      id = @last.id + 1
-    end
     @b = params[:json].to_json
-    @newsoiree = Event.create(:id => id, :jsonstring => @b)
+    @newsoiree = Event.create(:jsonstring => @b)
     puts "LOG :: Created #{@newsoiree.id} with #{@newsoiree.jsonstring}"
     redirect "/soiree/#{@newsoiree.id}"
   rescue Exception => e 
