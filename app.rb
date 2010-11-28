@@ -18,15 +18,23 @@ get '/soiree/:id' do
     # Event not found, serve some page saying it doesn't exist
     redirect '/'
   else 
+    @soiree = JSON.parse(@soiree.jsonstring)
     haml :soiree, :format => :html5, :page_id => 'soiree'
   end
 end
 
 post '/soiree' do
-  @b = params[:json]
   begin
-    @newsoiree = Event.create(:jsonstring => @b)
-    puts "LOG :: Created #{@newsoiree.id} with id #{@newsoiree.jsonstring}"
+    @last = Event.last()
+    id = nil
+    if @last == nil
+      id = 1
+    else
+      id = @last.id + 1
+    end
+    @b = params[:json].to_json
+    @newsoiree = Event.create(:id => id, :jsonstring => @b)
+    puts "LOG :: Created #{@newsoiree.id} with #{@newsoiree.jsonstring}"
     redirect "/soiree/#{@newsoiree.id}"
   rescue Exception => e 
     puts "LOG :: There was a fuck up #{@b}"

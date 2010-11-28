@@ -12,7 +12,8 @@ end
 
 get '/flicks/:id' do
   content_type :json
-  dayparam = params[:day] || "sat"
+  # TODO: Fix this! In Javascript as a parameter?
+  dayparam = params[:day] || "sun"
   @api = RestClient::Resource.new CINETICA_URL
   body @api["/movie/#{params[:id]}.json?day=#{dayparam}"].get.body
 end

@@ -6,7 +6,7 @@ DataMapper.setup(:default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/developm
 
 class Event
   include DataMapper::Resource  
-  property :id,           Serial
+  property :id,           Integer, :key => true
   property :jsonstring,   String
 end
 

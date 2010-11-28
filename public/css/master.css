@@ -171,3 +171,11 @@ a {
 div.selector span { width: 100px; }
 
 .result { margin-top: 1.5em; }
+
+span[id^='rest']:hover {
+  color: red;
+}
+
+#selectedrest {
+  background: #fff2a8;
+}
