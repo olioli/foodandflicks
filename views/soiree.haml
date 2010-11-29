@@ -1,11 +1,11 @@
 / @soiree has the hash
-- flick = @soiree["flick"]
-- poster_url = flick["posters"][0]["href"]
-- film_plot = flick["plot"]
-- film_where = @soiree["where"]
+- pp @soiree
+- poster_url = @soiree["posters"][0]["href"]
+- film_plot = @soiree["plot"]
+- film_where = @soiree["theaters"][0]
 - film_when = @soiree["when"]
-- film_food = @soiree["food"]
-- film_title = flick["title"]
+- film_food = @soiree["restaurant"]
+- film_title = @soiree["title"]
 
 .result
   %img.poster{:src => "#{poster_url}"}/
@@ -24,7 +24,7 @@
   %br/
   / twitter stuff
   #share-buttons
-    %a{:href => "http://twitter.com/share", :class="twitter-share-button", :"data-url" => "http://foodandflicks.ca/", :"data-text" => "#{film_title} @ #{film_where} - Join me for food & flicks! #foodandflicks http://foodandflicks.ca/soiree/#{@soiree.id}", :"data-count"=>"none", :"data-via"=>"foodandflicksca"}<
+    %a{:href => "http://twitter.com/share", :class=>"twitter-share-button", :"data-url" => "http://foodandflicks.ca/", :"data-text" => "#{film_title} @ #{film_where} - Join me for food & flicks! #foodandflicks http://foodandflicks.ca/soiree/#{@soiree.id}", :"data-count"=>"none", :"data-via"=>"foodandflicksca"}<
       Pull my friends!
     %script{ :type =>"text/javascript", :src => "http://platform.twitter.com/widgets.js" }
     

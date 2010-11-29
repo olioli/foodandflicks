@@ -118,7 +118,7 @@ function showFood(data){
    $("#selectedrest").attr({id : ""});
    $(this).attr({id : "selectedrest"});
    $("#createbutton").one('click', function(){
-     $.post("/soiree", {'json': liveFlick}, function(data){
+     $.post("/soiree", {'json': JSON.stringify(liveFlick)}, function(data){
      })
    }); 
  });
