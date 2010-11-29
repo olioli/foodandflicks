@@ -1,5 +1,4 @@
 
-  
   // Load the flicks
 var flicks    = null
   , theaters  = null
@@ -7,7 +6,7 @@ var flicks    = null
   , selel     = null
   , flk       = {};
   // Load the theaters
-  
+var myDays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];  
 
 function getFlicks( ){
     $.getJSON( '/flicks', function(data){
@@ -34,7 +33,9 @@ function selectFlick( e ){
 }
   
 function showTheater( flick ){
-  $.getJSON('/flicks/' + flick.id, function( flick ){
+  var day = myDays[new Date().getDay()];
+  var url = '/flicks/' + flick.id + '?day=' + day;
+  $.getJSON(url, function( flick ){
           $('#theater').html(flickHtml(flick)).show(); 
           $("#thselect").change(pickTime);
        });
