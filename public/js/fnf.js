@@ -68,6 +68,7 @@
     $.getJSON(url, function( flick ){
             $('#theater').html(flickHtml(flick)).show(); 
             $("#thselect").change(pickTime);
+            pickTime();
          });
   
   }
@@ -83,7 +84,7 @@
   	if (flick.theaters.length == 0) {
   	  html += "<br><p style='color:red'>Sorry, this movie is not offered at this time</p>";
   	} else {
-  	  html += '<br>Pick cinema and time:<select id="thselect"><option>Select a Theater</option>';
+  	  html += '<br>Pick cinema and time:<select id="thselect">';
   	  for (var i = 0; i < flick.theaters.length; i++) {
     		    var theater = flick.theaters[i]; 
     		    // TODO: add real time values
@@ -100,12 +101,14 @@
   } 
   
   function pickTime(){
+    if ($("#thselect").size() === 0) return;
+    
     var theater = $("#thselect").val().split('/');
     // Check for invalid
     var id = theater[0];
     $('#timePicker').html('');
     if (theater[1].length > 0) {
-      $('#timePicker').append('<select id="timePickerSelect"><option>Select a Time</option></select><button type="button" id="flickOk">Ok</button>');
+      $('#timePicker').append('<select id="timePickerSelect"></select><button type="button" id="flickOk">Ok</button>');
       theater[1].split(',').forEach(function(time){
         if (time == '') return;
         $('#timePickerSelect').append('<option value="'+ time +'">'+time+'</option>');
@@ -125,6 +128,7 @@
     // back to normal
     $('li.flick img').unbind();
     $('li.flick img').one('click', function(e){
+      $('#createbutton').hide();
       $('li.flick img').click(selectFlick);
       $('li.flick').add('li.moreflicks').fadeTo('fast', 1);
       $("#food").hide();
@@ -162,7 +166,7 @@
      liveFlick.restaurant = $(this).html();
      $("#selectedrest").attr({id : ""});
      $(this).attr({id : "selectedrest"});
-     $("#createbutton").toggle(true).one('click', function(){
+     $("#createbutton").show().one('click', function(){
           // $.post("/soiree", {'json': JSON.stringify(liveFlick)}, function(data){}
       
          $("input[name=json]").val(JSON.stringify(liveFlick));
