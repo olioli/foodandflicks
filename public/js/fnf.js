@@ -5,7 +5,7 @@
     , selection = null
     , selel     = null
     , flk       = {}
-    , at_a_time = 9
+    , at_a_time = 11
     ;
   
 // Load the theaters
@@ -123,7 +123,9 @@
     
     // Say you change your mind, the first time you click a movie we'll put things
     // back to normal
-    $('li.flick').one('click', function(e){
+    $('li.flick img').unbind();
+    $('li.flick img').one('click', function(e){
+      $('li.flick img').click(selectFlick);
       $('li.flick').add('li.moreflicks').fadeTo('fast', 1);
       $("#food").hide();
     });
