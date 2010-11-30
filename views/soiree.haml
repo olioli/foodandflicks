@@ -1,9 +1,10 @@
 / @soiree has the hash
 - pp @soiree
-- poster_url = @soiree["posters"][0]["href"]
+- #poster_url = @soiree["posters"][0]["href"]
+- poster_url = @soiree["thumbnail"]
 - film_plot = @soiree["plot"]
-- film_where = @soiree["theaters"][0]
-- film_when = @soiree["when"]
+- film_where = @soiree["theater"]
+- film_when = @soiree["time"]
 - film_food = @soiree["restaurant"]
 - film_title = @soiree["title"]
 
@@ -24,7 +25,7 @@
   %br/
   / twitter stuff
   #share-buttons
-    %a{:href => "http://twitter.com/share", :class=>"twitter-share-button", :"data-url" => "http://foodandflicks.ca/", :"data-text" => "#{film_title} @ #{film_where} - Join me for food & flicks! #foodandflicks http://foodandflicks.ca/soiree/#{@soiree.id}", :"data-count"=>"none", :"data-via"=>"foodandflicksca"}<
+    %a{:href => "http://twitter.com/share", :class=>"twitter-share-button", :"data-url" => "http://foodandflicks.ca/", :"data-text" => "#{film_title} @ #{film_where} - Join me for food & flicks! #foodandflicks http://foodandflicks.ca/soiree/#{@soiree[id]}", :"data-count"=>"none", :"data-via"=>"foodandflicksca"}<
       Pull my friends!
     %script{ :type =>"text/javascript", :src => "http://platform.twitter.com/widgets.js" }
     

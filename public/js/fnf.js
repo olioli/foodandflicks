@@ -45,7 +45,10 @@
                      , title : flick.title
                      });
     });
-  
+
+
+// Page through the flicks
+
     $('<li class="moreflicks"><a href="#">More...</a></li>')
       .appendTo('.flicks ul')
       .one('click', 
@@ -57,8 +60,9 @@
   }
   function selectFlick( e ){
     liveFlick = $(this).data('f');
-    liveFlick.el = $(this).closest('li');
     
+// Keep a reference to the jQuery element containing the flick
+    liveFlick.el = $(this).closest('li');    
     showTheater(liveFlick);
   }
   
@@ -152,26 +156,32 @@
 
   function showFood(data){
    var html = '<h2>2. Pick a restaurant nearby</h2><ul>';
-   if (data.listings.length > 0) {
+   if (data.listings.length > 0){
      for (var j = 0; j < data.listings.length && j < 10; j++) {
        var r = data.listings[j];
-       html += '<li><span id="rest'+j+'">' + r.name + '<span class="quiet"> on ' + r.address.street + ' </span></span></li>';
+       html += '<li class="restaurant"><span>' + r.name + '</span><span class="quiet"> @ ' + r.address.street + '</span></li>';
      }
      html += '</ul>';
    } else {
      html += '<p style="color:red">Sorry, no restaurant was found nearby</p>'; 
    }
+   
    $("#food").html(html).show();
-   $("span[id^='rest']").click(function(){
-     liveFlick.restaurant = $(this).html();
-     $("#selectedrest").attr({id : ""});
-     $(this).attr({id : "selectedrest"});
+
+   $('li.restaurant').click(function(){
+     
+     if (liveFlick.restaurant) $(liveFlick.restaurant).removeClass('selected');
+     $(this).addClass('selected');
+     
+     liveFlick.restaurant = this;
+     
      $("#createbutton").show().one('click', function(){
-          // $.post("/soiree", {'json': JSON.stringify(liveFlick)}, function(data){}
-      
-         $("input[name=json]").val(JSON.stringify(liveFlick));
-         $("form").submit();
+       liveFlick.restaurant = $('span:first', liveFlick.restaurant).html() + $('span:last', liveFlick.restaurant).html();
+       delete liveFlick.el; // Remove the jQuery element
+       $("input[name=json]").val(JSON.stringify(liveFlick));
+       $("form").submit();
      });
+
    });
   }
 
