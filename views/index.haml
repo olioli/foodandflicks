@@ -1,4 +1,4 @@
-%form
+%form{:action=>"soiree", :method=>"post"}
   .flicks
     %h2 1. Pick a movie
     %ul
@@ -6,3 +6,4 @@
   #food.food{:style => "display:none"}
   .poll
     %input#createbutton{:type => "button", :value => "Create an event"}/
+    %input{:type => "hidden", :name => "json"}

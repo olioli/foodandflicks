@@ -19,6 +19,8 @@ get '/food/:cinema' do
                              :pgLen => 50, 
                              :UID => "31337",
                              :apikey => YELLOW_API_KEY } })
+
+  expires Time.now + (60 * 60 * 24 * 7), :public, :must_revalidate
   content_type :json
   body food.body
 end

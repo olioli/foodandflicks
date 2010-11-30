@@ -90,7 +90,7 @@ a {
 	padding:11px;
 	display:block;
 	float:left;
-	margin:0 12px 12px 0;
+	margin:0px 13px 13px 0;
 }
 
 .food ul li {
@@ -99,6 +99,12 @@ a {
 .flicks ul li a {
 	display: block;
 	height: 140px;
+}
+
+.flicks ul li.moreflicks, .flicks ul li.moreflicks:hover {
+  background: none transparent;
+  border: none 0;
+  -moz-box-shadow: none;
 }
 
 .flicks ul li a img {
@@ -143,9 +149,12 @@ a {
 }
 
 .flicks ul li:hover {
-	-moz-box-shadow: 0 0 10px #999;
-	-webkit-box-shadow: 0 0 10px #999;
-	box-shadow: 0 0 10px #999;
+	-moz-box-shadow: 0 0 10px #555;
+	-webkit-box-shadow: 0 0 10px #555;
+	box-shadow: 0 0 10px #555;
+}
+
+.flicks ul li:hover img {
 }
 
 .time img {
@@ -177,6 +186,10 @@ div.selector span { width: 100px; }
 
 span[id^='rest']:hover {
   color: red;
+}
+
+#createbutton {
+  display: none;
 }
 
 #selectedrest {

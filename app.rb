@@ -29,7 +29,6 @@ post '/soiree/?' do
     @newsoiree = Event.create(:jsonstring => @b)
     puts "LOG :: Created #{@newsoiree.id} with #{@newsoiree.jsonstring}"
     redirect "/soiree/#{@newsoiree.id}"
-    
   rescue Exception => e 
     puts "LOG :: There was a fuck up #{@b}"
     e
