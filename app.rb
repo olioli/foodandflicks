@@ -9,7 +9,7 @@ require 'cinetica'
 require 'yellow'
 
 get '/' do
-  redirect '/organize.html'
+  haml :index
 end
 
 get '/soiree/:id/?' do

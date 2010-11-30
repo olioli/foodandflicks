@@ -1,13 +1,8 @@
-
-
-
-#logo
-  %img{ :src => "logo.png" }
-
-%p Pick a flick choice for your soirée 
-
-    
-    
-#chooser
-  %ol#flicks
-  
+%form
+  .flicks
+    %h2 1. Pick a movie
+    %ul
+  #theater{:style => "display:none;"}
+  #food.food{:style => "display:none"}
+  .poll
+    %input#createbutton{:type => "button", :value => "Create an event"}/

@@ -93,6 +93,9 @@ a {
 	margin:0 12px 12px 0;
 }
 
+.food ul li {
+  cursor: pointer;
+}
 .flicks ul li a {
 	display: block;
 	height: 140px;
