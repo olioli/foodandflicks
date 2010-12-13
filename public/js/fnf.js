@@ -17,7 +17,6 @@
     $.getJSON( '/flicks', function(data){
 
 // Eliminate flicks without thumbnails
-      
       flicks = data.filter(function(f){return f.thumbnail;});       
 
 // Show the first batch
@@ -126,6 +125,8 @@
   function letsdothis(){
     // Update selection with time and theater    
     var i = 0;
+    
+    $(liveFlick.el).prependTo('.flicks ul');
     $('li.flick').add('li.moreflicks').not(liveFlick.el).fadeTo('slow', 0.3 );
     
     // Say you change your mind, the first time you click a movie we'll put things
@@ -169,7 +170,7 @@
    $("#food").html(html).show();
 
    $('li.restaurant').click(function(){
-     
+        
      if (liveFlick.restaurant) $(liveFlick.restaurant).removeClass('selected');
      $(this).addClass('selected');
      

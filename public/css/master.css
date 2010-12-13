@@ -121,7 +121,7 @@ a {
 	background:url("http://readon.ly/img/highlight-gradient.png") repeat-x scroll 0 0 #FFFF00;
 /*	color:#999900;*/
 	font-family:"Lucida Grande","Lucida Sans Unicode",sans-serif;
-	font-size:16px;
+	font-size:13px;
 	left:50%;
 	line-height:24px;
 	margin-left:-300px;
@@ -162,7 +162,7 @@ a {
 	margin-right: 1em;
 }
 .time p {
-	margin-left: 112px;
+	/*margin-left: 112px;*/
 }
 
 #chooser #flicks{

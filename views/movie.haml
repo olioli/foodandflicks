@@ -1,0 +1,23 @@
+<div class="time">
+<a class="close" href="#">Close</a>' +
+<img src="{{flick.posters[1].href}}"/>
+<h3>flick.title</h3>
+<p>flick.plot</p>
+
+  	if (flick.theaters.length == 0) {
+  	  html += "<br><p style='color:red'>Sorry, this movie is not offered at this time</p>";
+  	} else {
+  	  html += '<br>Pick cinema and time:<select id="thselect">';
+  	  for (var i = 0; i < flick.theaters.length; i++) {
+    		    var theater = flick.theaters[i]; 
+    		    // TODO: add real time values
+    		    html += '<option value="'+theater.href.split('/')[4] + '/';
+    		    for (var j = 0; j < theater.times.length; j++) {
+    		      html += theater.times[j] + ',';
+    		    }
+    		    html += '">'+ theater.name + '</option>'; 
+    	} 
+    	html += '</select></br><span id="timePicker"></span>';
+    }
+  	html +=	'</div>';
+    return html;
