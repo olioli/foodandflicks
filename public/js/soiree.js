@@ -1,17 +1,12 @@
-var Soiree = (function( $ ){  
-  
-  var data = null;
-  
-  
-  
-  
-  return  { 
-      get   : function( fn ){}
-    , post  : function(){}  
-  
-    
-  }
+var Soiree = Backbone.Model.extend({ 
+     
+    initialize: function( date ){
+      this.set( { date    : date || new Date()
+                , flick   : null
+                , food    : null
+                , friends : [] })
+    }
+
+  });
   
   
-  
-}(jQuery))
