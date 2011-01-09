@@ -5,10 +5,6 @@
 
 (function($, global){
 
-  Number.prototype.days = function(){
-    return this * 24 * 60 * 60 * 1000;
-  };
-
   var DAYS     = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
     , TODAY_IS = new Date()
 
@@ -58,7 +54,7 @@
 
     })
 
-  ,   = Backbone.Collection.extend({
+  , Movies = Backbone.Collection.extend({
         url   : '/flicks'
       , model : Movie
       , withThumbnails: function(){
