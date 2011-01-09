@@ -1,4 +1,5 @@
-var Soiree = Backbone.Model.extend({ 
+
+Object.ns('FNF.models').Soiree = Backbone.Model.extend({ 
      
     initialize: function( date ){
       this.set( { date    : date || new Date()
