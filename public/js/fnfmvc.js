@@ -68,7 +68,7 @@
             });
         }
       
-      , selectMovie: function(movie){
+      , selectMovie: function( movie ){
           this.selectedMovie = movie;
         }
     })
@@ -79,8 +79,7 @@
         tagName   : 'li'
       , className : 'flick'
       , tpl       : _.template(
-
-          '<a href="/flicks/<%= id %>.json">'
+          '<a href="#/flicks/<%= id %>">'
         + '<img src="<%= thumbnail %>" title="<%= title %>"/></a>' )
     
       , events    : {
@@ -93,7 +92,7 @@
           
           $(this.el).addClass('selected');
           
-          this.trigger( 'moviethumb:selected', this, this.model );
+          //this.trigger( 'moviethumb:selected', this, this.model );
         }
       
       , deselect: function(){
@@ -135,16 +134,8 @@
 // Highlight the movie that's been selected in the collection.
            
           this.movies.bind( 'moviethumb:selected', _.bind(this.highlight, this));
-        
-// Add some search methods to our movie thumbnails array,
 
-          this.thumbs = [];
-          this.thumbs.locate = function(movie){
-            // "this" is the array
-            return _(this).detect( function(t){ return t.model === movie; })
-          };
-
-          this.detail = new MovieDetail()
+          this.detail = new MovieDetail;
 
         }
       
@@ -173,20 +164,17 @@
 
           _(this.thumbs).chain()
             .without( thumb )
-            .invoke( 'deselect' );          
+            .invoke( 'deselect' );       
           
           this.detail.show( movie );
         }
-    
-      , render: function(){
         
-          function prevent(e){ e.preventDefault(); }  
-      
-          this.$('li.flick a').click(prevent);
-          return this;
+      , reset: function(){
+          _(this.thumbs)
+            .invoke( 'deselect' );
         }
-
-  // MovieThumb constructor method for convenience
+        
+// MovieThumb constructor method for convenience
 
       , thumb: function( movie ){
         
@@ -203,9 +191,9 @@
     , className: 'flick-detail'
     , events: {
         'click a.close' : 'close'  
-      }
+      }    
     , tpl: _.template(
-          '<a class="close" href="#"></a>'
+          '<a class="close" href="#/flicks"></a>'
         + '<img src="<%= posters[0].href %>">'
         + '<h3><%= title %></h3>'
         + '<p><%= plot %></p>'
@@ -249,9 +237,8 @@
 
   
     , show: function( movie ){
-      
-        var movie = this.model = movie;
-    
+        this.model = movie;
+
         if ( movie.detailed === false ) {
           movie.expand ( _.bind(this.show, this, movie) );
           return;
@@ -269,35 +256,88 @@
           , of: $(window)
         }).show();
 
+        this.trigger('moviedetail:show');
       }
     
     , close: function(e){
-        e.preventDefault();
         $(this.el).hide();
-      
+        this.trigger('moviedetail:close');
       }
     })
 
 
 // The application view
 
-
-  , FNF = Backbone.View.extend({
-
+  , Application = Backbone.View.extend({
+    
       title : 'Food & Flicks'  
     , el    : 'div.flicks'    
-
+    
     , initialize : function(){
-        this.movies = new Movies;
-        this.grid = new MovieGrid({ model: this.movies });
+      
+        this.grid = new MovieGrid({ model: this.model });
+        this.detail = new MovieDetail;
+        
       }
+      
     , render: function(){    
         $( this.grid.render().el ).appendTo( this.el ); 
       }
 
     });
 
+// The FNF controller is the 'main' controller for application.
+// Backbone controllers are essentially a convenience to keep
+// track of the hash fragment of the URL and dispatch accordingly.
 
+  var FNF = Backbone.Controller.extend({
+
+    routes: {
+        '/flicks'          : 'flicks'
+      , '/flicks/:flick'   : 'detail'
+      , '/soirees/:soiree' : 'soiree'
+    }
+
+  , flicks: function(){ console.log ('lalala.'); }
+
+  , detail: function( id ){
+  
+      this.app.detail.show ( this.movies.get( id ) );
+
+    }
+    
+// Starts the application
+// The 'movies' parameter is passed directly to this method
+// from the index.haml to bootstrap the application.
+
+  , start: function( movies ){
+
+// Initialize a collection of movie models
+
+      this.movies = new Movies;
+
+      this.app = new Application({ model: this.movies });
+
+// When the detail view is closed, reset the grid to its initial state
+    
+      this.app.detail.bind('moviedetail:close', _.bind(function(){    
+
+        this.app.grid.reset();
+      
+      }, this));
+      
+      this.movies.refresh( movies );
+      this.app.render();
+
+// Backbone.history is what is used internally by the controllers.
+// start() begins the process by triggering the events bound to 
+// the current URL hash fragment. 
+      
+      Backbone.history.start();
+    }
+
+  });
+  
   global.FNF = new FNF;
 
 

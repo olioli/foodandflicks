@@ -8,5 +8,4 @@
     %input{:type => "hidden", :name => "json"}
     
 :javascript
-  FNF.movies.refresh( #{@movies.to_json} )
-  FNF.render();
+  FNF.start( #{@movies.to_json} );
