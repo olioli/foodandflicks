@@ -9,6 +9,8 @@ require 'cinetica'
 require 'yellow'
 
 get '/' do
+  @movies = Cinetica.movies
+  expires Time.now + (60 * 60 * 24), :public, :must_revalidate
   haml :index
 end
 

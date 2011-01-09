@@ -116,37 +116,30 @@ a {
 	color: #999;
 }
 
-.time {
+.flick-detail {
 	-moz-box-shadow:0 0 15px #999 !important;
 	background:url("http://readon.ly/img/highlight-gradient.png") repeat-x scroll 0 0 #FFFF00;
-/*	color:#999900;*/
 	font-family:"Lucida Grande","Lucida Sans Unicode",sans-serif;
 	font-size:13px;
-	left:50%;
 	line-height:24px;
-	margin-left:-300px;
-	margin-top:-200px;
-	padding:1em;
-	position:absolute;
-	top:50%;
-	width:600px;
-	z-index:255;
+	padding:1.5em;
+	width: 500px;
+	position: fixed;
+	z-index: 255;
 }
 
-.time .close {
-	background:url("http://images.apple.com/global/elements/close_button.png") no-repeat scroll 0 0 transparent;
-	cursor:pointer;
-	display:block;
-	height:30px;
-	outline:medium none;
-	overflow:hidden;
-	position:absolute;
-	right:-10px;
-	text-indent:-9999px;
-	top:-10px;
-	width:30px;
-	z-index:20001;
+.flick-detail img {
+	float: left;
+	margin-right: 1.5em;
 }
+
+.flick-detail p {
+	
+}
+
+/* todo change to ul.flicks li */
+
+.flicks ul li a:focus { outline: 0 none;}
 
 .flicks ul li:hover {
 	-moz-box-shadow: 0 0 10px #555;
@@ -154,15 +147,35 @@ a {
 	box-shadow: 0 0 10px #555;
 }
 
-.flicks ul li:hover img {
+.flicks ul li.selected {
+	-moz-box-shadow: inset 0 0 0px 5px #FFC600;
+	-webkit-box-shadow: inset 0 0 0px 5px #FFC600;
+	box-shadow: inset 0 0 0px 5px #FFC600;
 }
 
-.time img {
-	float: left;
-	margin-right: 1em;
+ol.movie-day {
+  list-style-type: none;
+  margin: 0 auto;
 }
-.time p {
-	/*margin-left: 112px;*/
+  
+ol.movie-day li {
+  margin: 0;
+  padding: 5px;
+  margin: 10px 1px 0px 0px;
+  display: inline-block;
+  text-align: center;
+  width: 27px;
+  background-color: #EBE95B;
+  cursor: pointer;
+}
+
+ol.movie-day li.selected {
+  background-color: #aaa;
+}
+
+
+.flicks ul li:hover img {
+
 }
 
 #chooser #flicks{
@@ -194,4 +207,17 @@ li.restaurant:hover {
 
 li.restaurant.selected {
   background: #fff2a8;
+}
+
+.flick-detail a.close {
+	background:url(/img/x.png) no-repeat;	
+	width:25px;
+	height:29px;
+	display:inline;
+	z-index:3200;
+	position:absolute;
+	top:4px;
+	right:4px;
+	cursor:pointer;
+	outline: none;
 }
