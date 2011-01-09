@@ -5,14 +5,10 @@
 
 (function($, global){
 
-  Number.prototype.days = function(){
-    return this * 24 * 60 * 60 * 1000;
-  };
-
-  var DAYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+  var DAYS     = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
     , TODAY_IS = new Date()
 
-    , Movie = Backbone.Model.extend({
+    , Movie    = Backbone.Model.extend({
 
 // After Backbone creates an instance of a model, the 'initialize' method
 // will be invoked if it exists.
