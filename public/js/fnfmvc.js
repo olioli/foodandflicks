@@ -8,6 +8,11 @@
   var DAYS     = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
     , TODAY = new Date()
 
+// TODO:
+//  When there's a validation error, make sure to trigger an event
+//  so that the detail view can update itself accordingly (example:
+//  there are no theaters showing that movie, the times are missing, etc)
+
     , Movie    = Backbone.Model.extend({
 
 // After Backbone creates an instance of a model, the 'initialize' method
@@ -255,8 +260,6 @@
             
             }, this);
         }
-        
-        // Initial data
         updateTimes.call(this);
         
         movie.bind( 'change:theaters', _.bind(updateTimes, this) );
@@ -289,6 +292,7 @@
         }).show();
 
         this.trigger('moviedetail:show');
+        return this;
       }
     
     , close: function(e){
@@ -318,6 +322,23 @@
 
     });
 
+/*
+
+  The controller instantiate the model.
+  
+  The controller instantiates views, passing in the model:
+  
+      The view binds to model events and initializes to current model state
+      
+  The controller binds to view events 
+      
+      Upon an event, the controller updates the model
+      
+  The controller triggers model changes ( changes the model )
+  
+*/
+
+
 // The FNF controller is the 'main' controller for application.
 // Backbone controllers are essentially a convenience to keep
 // track of the hash fragment of the URL and dispatch accordingly.
@@ -330,11 +351,15 @@
       , '/soirees/:soiree' : 'soiree'
     }
 
-  , flicks: function(){ console.log ('lalala.'); }
+  , flicks: function(){ 
+      
+      this.app.detail.close();
+    
+    }
 
   , detail: function( id ){
   
-      this.app.detail.show ( this.movies.get( id ) );
+      this.app.detail.show( this.movies.get( id ) );
 
     }
     
@@ -361,7 +386,9 @@
 // 'this' is going to be the detail view
       
       this.app.detail.bind('moviedetail:daypick', function(day){
+        
         this.model.selectDay( day );
+
       });
       
       this.movies.refresh( movies );
