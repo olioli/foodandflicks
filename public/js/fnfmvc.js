@@ -6,7 +6,7 @@
 (function($, global){
 
   var DAYS     = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-    , TODAY_IS = new Date()
+    , TODAY = new Date()
 
     , Movie    = Backbone.Model.extend({
 
@@ -15,7 +15,7 @@
 
         initialize: function(){
           this.detailed = false;  
-          this.attributes.selectedDay = TODAY_IS.getDay();
+          this.attributes.selectedDay = DAYS[ TODAY.getDay() ];
         }
 
       , hasThumbnail: function(){
@@ -26,13 +26,13 @@
 
       , url: function(){
   
-          return '/flicks/' + this.id + "?day=" + DAYS[this.attributes.selectedDay];
+          return '/flicks/' + this.id + "?day=" + this.attributes.selectedDay;
     
         }
 
       , selectDay: function( day ){
           this.set( { selectedDay: day } );
-          this.expand();        
+          this.fetch();
         }
 
       , expand: function( cb ){
@@ -132,7 +132,7 @@
           this.movies.bind( 'moviethumb:selected', _.bind(this.highlight, this));
 
           this.detail = new MovieDetail;
-
+          this.thumbs = [];
         }
       
       , refresh: function( movies ){
@@ -185,25 +185,42 @@
   , MovieDetail = Backbone.View.extend({
       tagName: 'div'
     , className: 'flick-detail'
+
+// When the events are triggered using Backbone's event
+// handling stuff for views, 'this' is set to the view,
+// rather than the element that triggered the element
+// (as you might expect with jQuery).    
+    
     , events: {
-        'click a.close' : 'close'  
-      }    
+        'click a.close'     : 'close'
+      , 'change select.day' : 'pickDay'
+      }
+
     , tpl: _.template(
           '<a class="close" href="#/flicks"></a>'
         + '<img src="<%= posters[0].href %>">'
         + '<h3><%= title %></h3>'
         + '<p><%= plot %></p>'
-        + '<select class="day"></select>'
+        + '<div class="daytime">'
+        + '<select class="day"></select>&nbsp;'
         + '<select class="time"></select>'
+        + '</div>'
       )
-      
+
+    , pickDay: function(){
+        console.log('picked a day', this);
+
+        var d = this.$('select.day').val();
+        this.trigger('moviedetail:daypick', d);
+      }
+
     , render: function(){
 
         var daylist, idx, dayabbr, moviedate
           , movie = this.model
-          , self = this
-          , tag = this.make
-          , today = TODAY_IS.getDay()
+          , self  = this
+          , tag   = this.make
+          , today = TODAY.getDay()
           , j
           ;
 
@@ -212,19 +229,38 @@
         for (var i = 0; i < 7; i++){
           j = (today + i) % DAYS.length;
           
-          $( tag('option', { value: j }, DAYS[j]) )
+          $( tag('option', { value:  DAYS[j] }, DAYS[j]) )
             .appendTo( this.$('select.day') );
         }
 
-        _.each( movie.attributes.theaters[0].times, 
-          
-          function(t){
-            
-            $( tag('option', { value: t }, t) )
-              .appendTo( this.$('select.time') );
-            
-          }, this);
 
+        function updateTimes(){
+          
+          var movie = this.model;
+          this.$('select.time').empty();
+          
+          _.each( movie.attributes.theaters, 
+          
+            function(theater){
+            
+              _.each ( theater.times, function(t){
+              
+                $( tag( 'option'
+                      , { value: theater.id + t }
+                      , t + ' - ' + theater.name
+                      ))
+                .appendTo( this.$('select.time') );
+            
+              }, this);
+            
+            }, this);
+        }
+        
+        // Initial data
+        updateTimes.call(this);
+        
+        movie.bind( 'change:theaters', _.bind(updateTimes, this) );
+        
         $( this.el ).appendTo('body');      
         this.rendered = true;
 
@@ -321,13 +357,19 @@
         this.app.grid.reset();
       
       }, this));
+
+// 'this' is going to be the detail view
+      
+      this.app.detail.bind('moviedetail:daypick', function(day){
+        this.model.selectDay( day );
+      });
       
       this.movies.refresh( movies );
       this.app.render();
 
 // Backbone.history is what is used internally by the controllers.
 // start() begins the process by triggering the events bound to 
-// the current URL hash fragment. 
+// the current URL hash fragment.
       
       Backbone.history.start();
     }

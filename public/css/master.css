@@ -132,8 +132,9 @@ a {
 	margin-right: 1.5em;
 }
 
-.flick-detail p {
-	
+.flick-detail .daytime {
+  text-align: center;
+  margin-top: 10px;
 }
 
 /* todo change to ul.flicks li */
