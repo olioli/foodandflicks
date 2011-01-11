@@ -1,68 +1,125 @@
+// #  Building a client-side MVC app 
+// ## with Backbone, Underscore and jQuery
+
+// ### Introduction
+// - What is Backbone?
+// > Backbone supplies structure to JavaScript-heavy applications by providing models with key-value binding and custom events, collections with a rich API of enumerable functions, views with declarative event handling, and connects it all to your existing application over a RESTful JSON interface. 
+
+// - What is Underscore.js?
+// > Underscore is a utility-belt library for JavaScript that provides a 
+// > lot of the functional programming support that you would expect in 
+// > Prototype.js (or Ruby), but without extending any of the built-in 
+// > JavaScript objects. It's the tie to go along with jQuery's tux.
+
+// - What is MVC?
+// > It is a way to organize your GUI code into a delicious (?), 
+// neatly separated sandwich. 
+
+
+// ### Classic MVC refresher 
+// 1. Controller is the boss. He's in charge. He must be aware of everything you do.
+// 2. Views react when the model changes.  **That's it.**  
+// 3. Models contain data, but also *state*. I often forget this because of my stupid.
+
+//
+// ### It is called a compound pattern because it is composed of other patterns, namely:
+// 1. *Observer* ( ie. events )  
+// 2. *Strategy*  
+// The view's controller is a strategy. It handles its behaviour
+// and can be swapped for another one if that needs to change.  
+// 3. *Composite*  
+// Views are a composite pattern - or at least can be - because
+// you group a bunch of little views inside a big one and can
+// address the big one have it deal with its children.
+// ## LET US NEVER SPEAK OF THIS AGAIN
+
+// In *Head Start: Design Patterns*, mp3 player example:  
+// 1. Press play                                       
+// 2. ( Controller is notified that you pressed play )  
+// 3. Controller tells model "Start playing NOW. Or else."  
+// 4. Model starts playing; view is notified "I am playing this song"  
+// 5. View displays the song you're playing
+
+// # Backbone
+
 /*
-=== Food & Flicks
-
+TODO:
+When there's a validation error, make sure to trigger an event
+so that the detail view can update itself accordingly (example:
+there are no theaters showing that movie, the times are missing, etc)
 */
-
+// Fizz, buzz
 (function($, global){
 
+// Some stuff we'll need
   var DAYS     = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
     , TODAY = new Date()
-
-// TODO:
-//  When there's a validation error, make sure to trigger an event
-//  so that the detail view can update itself accordingly (example:
-//  there are no theaters showing that movie, the times are missing, etc)
-
+    
+// ### Movie *model*  
+// Backbone.Model.extend lets you define a model and returns a contructor
+// function.  You can then create instances of that model using the *new* operator.
     , Movie    = Backbone.Model.extend({
 
 // After Backbone creates an instance of a model, the 'initialize' method
-// will be invoked if it exists.
-
-        initialize: function(){
-          this.detailed = false;  
+// will be invoked if it exists. The *options* argument is an object that
+// you pass when invoking the constructor.
+        initialize: function( options ){
+          this.detailed = false;
           this.attributes.selectedDay = DAYS[ TODAY.getDay() ];
         }
 
-      , hasThumbnail: function(){
-
-          return (this.get('thumbnail') || '') !== '';                
-  
-        }
-
+// The *url* method is special.  This is what Backbone uses to resolve the url
+// that it can use to fetch or save the model from the backend. More on saving
+// the model later.
       , url: function(){
-  
           return '/flicks/' + this.id + "?day=" + this.attributes.selectedDay;
-    
         }
-
+        
+// Does this movie have a thumbnail?
+      , hasThumbnail: function(){
+          return (this.get('thumbnail') || '') !== '';
+        }
+        
       , selectDay: function( day ){
           this.set( { selectedDay: day } );
           this.fetch();
         }
-
-      , expand: function( cb ){
-          var self = this;
-    
-          function ex( model, response ){
-            console.debug(model);
-            self.detailed = true;
-            if (cb) cb();
-          };
+// TODO: selecttime and selecttheater
       
-          this.fetch({ success: ex
-                     , failure: function(){ 
-                         console.error("OH NOES!"); 
-                         self.detailed = null;  
-                       } 
-                     });    
+// Because of the way the API i'm using is built, an additional call to the
+// backend is necessary to get a detailed version of the movie model.
+      , showDetail: function(){
+          if ( !this.get('state') === 'detailed' ){ 
+            this.fetch({ success: _.bind(this.showDetail, this) });
+            return;
+          }
+// We set the state of the model to 'detailed'
+          this.set('state', 'detailed');
         }
-
     })
+// As you may have noticed, there are some things in the model that are not
+// directly related to the data. There are ways of separating these things properly,
+// but we're not really going to get into that.
 
+  , Soiree = Backbone.Model.extend({
+    
+      url       : '/soiree/:id'
+    , validate  : function(){
+      
+        return this.get('flick')
+            && this.get('food');
+      }
+    
+    })
+    
+// ### Movies *collection*
+// Backbone collections are ordered sets of models.
   , Movies = Backbone.Collection.extend({
         url   : '/flicks'
       , model : Movie
       , withThumbnails: function(){
+// Backbone collections are extended with the "enumerable" methods found in Underscore
+// for convenience. So you can do collection.filter, collection.select, etc.
           return this.select( 
             function(m){ 
               return m.hasThumbnail(); 
@@ -197,7 +254,7 @@
 // (as you might expect with jQuery).    
     
     , events: {
-        'click a.close'     : 'close'
+        'click a.close'     : 'hide'
       , 'change select.day' : 'pickDay'
       }
 
@@ -211,10 +268,26 @@
         + '<select class="time"></select>'
         + '</div>'
       )
+      
+    , initialize: function(){
+        
+        var movie = this.model;
+        
+        movie.bind( 'changed:state', _.bind(function(){
+                    
+          var state = movie.get('state');
+          
+          if (state === 'detailed'){
+           
+            this.show();
+            
+          }
+        }, this));
+      
+      }
 
+// When a day is selected in the day combo, trigger a daypick event
     , pickDay: function(){
-        console.log('picked a day', this);
-
         var d = this.$('select.day').val();
         this.trigger('moviedetail:daypick', d);
       }
@@ -271,14 +344,8 @@
       }
 
   
-    , show: function( movie ){
-        this.model = movie;
-
-        if ( movie.detailed === false ) {
-          movie.expand ( _.bind(this.show, this, movie) );
-          return;
-        }
-
+    , show: function(){
+      
         if (!this.rendered) this.render();      
     
         this.$('img').attr('src', movie.attributes.thumbnail );
@@ -295,7 +362,7 @@
         return this;
       }
     
-    , close: function(e){
+    , hide: function(e){
         $(this.el).hide();
         this.trigger('moviedetail:close');
       }
@@ -358,9 +425,15 @@
     }
 
   , detail: function( id ){
-  
-      this.app.detail.show( this.movies.get( id ) );
-
+      
+      var movie = this.movies.get( id )
+        
+      if (!movie.detailed){ 
+        movie.fetch({ success: _.bind(this.detail, this) });
+        return;
+      }
+      
+      movie.set('state', 'detail');
     }
     
 // Starts the application
