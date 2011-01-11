@@ -84,8 +84,7 @@ there are no theaters showing that movie, the times are missing, etc)
           this.set( { selectedDay: day } );
           this.fetch();
         }
-// TODO: selecttime and selecttheater
-      
+
 // Because of the way the API i'm using is built, an additional call to the
 // backend is necessary to get a detailed version of the movie model.
       , showDetail: function(){
@@ -97,20 +96,38 @@ there are no theaters showing that movie, the times are missing, etc)
           this.set('state', 'detailed');
         }
     })
-// As you may have noticed, there are some things in the model that are not
-// directly related to the data. There are ways of separating these things properly,
-// but we're not really going to get into that.
 
-  , Soiree = Backbone.Model.extend({
-    
-      url       : '/soiree/:id'
-    , validate  : function(){
+// ### Soiree *model*
+// The *soiree* model is the one that we will need to persist. It stores
+// the movie that the user has selected and the time and theather they've
+// picked.
+  , Soiree = Backbone.Model.extend({    
       
+      url       : '/soiree'
+      
+    , validate  : function(){    
         return this.get('flick')
             && this.get('food');
       }
+            
+    , selectDay: function( day ){
+        this.set('day', day );
+   	  }   	  
     
-    })
+    , selectTime: function( time ){
+        this.set('time', time );
+   	  }   	  
+    
+   	, selectTheater: function( theater){
+   	    this.set( 'theater', theater );
+   	  }            
+
+   	, selectMovie: function( movie ){ 
+   	    this.movie = movie;     	
+   	    this.set( 'movie', movie.id );
+      }
+        
+  })
     
 // ### Movies *collection*
 // Backbone collections are ordered sets of models.
@@ -141,9 +158,7 @@ there are no theaters showing that movie, the times are missing, etc)
         + '<img src="<%= thumbnail %>" title="<%= title %>"/></a>' )
     
       , events    : {
-
-          'click' : 'select'
-        
+          'click' : 'select'        
         }
 
       , select: function(){
