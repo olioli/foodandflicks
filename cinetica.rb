@@ -45,5 +45,7 @@ end
 get '/flicks/:id' do
   expires Time.now + (60 * 60 * 24), :public, :must_revalidate
   content_type :json
-  body Cinetica.movie(params[:id], params[:day]).to_json
+  movie = Cinetica.movie(params[:id], params[:day])
+  movie[:id] = params[:id]
+  body movie.to_json
 end

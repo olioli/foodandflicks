@@ -59,20 +59,29 @@ there are no theaters showing that movie, the times are missing, etc)
 // Backbone.Model.extend lets you define a model and returns a contructor
 // function.  You can then create instances of that model using the *new* operator.
     , Movie    = Backbone.Model.extend({
+      
+// When you create a new model, it will have the following attributes set
+// as default. Hence the name *defaults*.
+        defaults: {
+        
+          selectedDay : DAYS[ TODAY.getDay() ]
+        
+        }
 
 // After Backbone creates an instance of a model, the 'initialize' method
 // will be invoked if it exists. The *options* argument is an object that
 // you pass when invoking the constructor.
-        initialize: function( options ){
-          this.detailed = false;
-          this.attributes.selectedDay = DAYS[ TODAY.getDay() ];
+      , initialize: function( options ){
+
+/* In this case, we have nothing to do here. */          
+          
         }
 
 // The *url* method is special.  This is what Backbone uses to resolve the url
 // that it can use to fetch or save the model from the backend. More on saving
 // the model later.
       , url: function(){
-          return '/flicks/' + this.id + "?day=" + this.attributes.selectedDay;
+          return '/flicks/' + this.id + "?day=" + this.get('selectedDay');
         }
         
 // Does this movie have a thumbnail?
@@ -88,45 +97,61 @@ there are no theaters showing that movie, the times are missing, etc)
 // Because of the way the API i'm using is built, an additional call to the
 // backend is necessary to get a detailed version of the movie model.
       , showDetail: function(){
-          if ( !this.get('state') === 'detailed' ){ 
-            this.fetch({ success: _.bind(this.showDetail, this) });
-            return;
-          }
-// We set the state of the model to 'detailed'
-          this.set('state', 'detailed');
+          var self = this;
+     
+          if (!this.isDetailed() ){ 
+
+            this.fetch({ 
+              
+              success: function(){
+                self.set( { state: 'detailed' });
+              }
+              
+            , error: function(){
+                self.set( { state: 'thumb' });
+              }
+            });
+          }  
         }
+      
+      , isDetailed: function(){
+        
+          return this.get('state') === 'detailed';
+      }
     })
 
 // ### Soiree *model*
 // The *soiree* model is the one that we will need to persist. It stores
-// the movie that the user has selected and the time and theather they've
-// picked.
+// what the user has selected: movie, time, theater, food.
   , Soiree = Backbone.Model.extend({    
       
-      url       : '/soiree'
-      
-    , validate  : function(){    
-        return this.get('flick')
-            && this.get('food');
-      }
-            
-    , selectDay: function( day ){
-        this.set('day', day );
-   	  }   	  
+        url       : '/soiree'
     
-    , selectTime: function( time ){
-        this.set('time', time );
-   	  }   	  
-    
-   	, selectTheater: function( theater){
-   	    this.set( 'theater', theater );
-   	  }            
+      , validate  : function(){    
+          return this.get('flick')
+              && this.get('food');
+        }
+          
+      , selectDay: function( day ){
+          this.set('day', day );
+     	  }   	  
+  
+      , selectTime: function( time ){
+          this.set('time', time );
+     	  }   	  
+  
+     	, selectTheater: function( theater){
+     	    this.set( 'theater', theater );
+     	  }            
 
-   	, selectMovie: function( movie ){ 
-   	    this.movie = movie;     	
-   	    this.set( 'movie', movie.id );
-      }
-        
+     	, selectMovie: function( movie ){ 
+     	    this.movie = movie;     	
+     	    this.set( 'movie', movie.id );
+        }
+
+     	, selectFood: function( food ){ 	
+     	    this.set( 'food', food.id );
+        }        
   })
     
 // ### Movies *collection*
@@ -141,10 +166,6 @@ there are no theaters showing that movie, the times are missing, etc)
             function(m){ 
               return m.hasThumbnail(); 
             });
-        }
-      
-      , selectMovie: function( movie ){
-          this.selectedMovie = movie;
         }
     })
   
@@ -161,11 +182,10 @@ there are no theaters showing that movie, the times are missing, etc)
           'click' : 'select'        
         }
 
-      , select: function(){
-          
+      , select: function(){          
+        
           $(this.el).addClass('selected');
-          
-          //this.trigger( 'moviethumb:selected', this, this.model );
+        
         }
       
       , deselect: function(){
@@ -190,11 +210,9 @@ there are no theaters showing that movie, the times are missing, etc)
 
       
   , MovieGrid = Backbone.View.extend({
-  
         tagName: 'ul'
-      
       , initialize: function(){
-
+        
           this.movies = this.model;
       
 // When the collection refreshes, draw the view. 
@@ -202,33 +220,29 @@ there are no theaters showing that movie, the times are missing, etc)
 // event fires, "this" would be set to the collection object
 // instead of the view object, which is what we want
 
-          this.movies.bind( 'refresh', _.bind(this.refresh, this) );
+          this.movies.bind( 'refresh', _.bind(this.render, this) );
         
 // Highlight the movie that's been selected in the collection.
-           
+ 
           this.movies.bind( 'moviethumb:selected', _.bind(this.highlight, this));
-
-          this.detail = new MovieDetail;
+          
           this.thumbs = [];
         }
-      
-      , refresh: function( movies ){
-          
+
+      , render: function(){
+        
           var mt;
           
-          movies.withThumbnails().forEach(
-
-            function(m){
-              
+          this.model.withThumbnails().forEach(
+            function(m){              
               mt = this.thumb( m );
 
 // When a movie thumbnail is selected, call the highlight method (and bind it first)
-
               mt.bind( 'moviethumb:selected', _.bind( this.highlight, this ));
-              
-              $( mt.render().el ).appendTo(this.el);            
-            
+              $( mt.render().el ).appendTo(this.el);
             }, this);
+          
+          return this;
         }
       
       , highlight: function( thumb, movie ){
@@ -238,8 +252,6 @@ there are no theaters showing that movie, the times are missing, etc)
           _(this.thumbs).chain()
             .without( thumb )
             .invoke( 'deselect' );       
-          
-          this.detail.show( movie );
         }
         
       , reset: function(){
@@ -285,17 +297,13 @@ there are no theaters showing that movie, the times are missing, etc)
       )
       
     , initialize: function(){
-        
-        var movie = this.model;
-        
-        movie.bind( 'changed:state', _.bind(function(){
-                    
+              
+        this.model.bind( 'changed:state', _.bind(function(){
+                            
           var state = movie.get('state');
-          
+      
           if (state === 'detailed'){
-           
             this.show();
-            
           }
         }, this));
       
@@ -317,7 +325,7 @@ there are no theaters showing that movie, the times are missing, etc)
           , j
           ;
 
-        $( this.el ).html( this.tpl(movie.attributes) );
+        $( this.el ).html( this.tpl(movie.toJSON()) );
 
         for (var i = 0; i < 7; i++){
           j = (today + i) % DAYS.length;
@@ -388,18 +396,18 @@ there are no theaters showing that movie, the times are missing, etc)
 
   , Application = Backbone.View.extend({
     
-      title : 'Food & Flicks'  
-    , el    : 'div.flicks'    
+      title : 'Food & Flicks'
+    , el    : 'div.flicks'
     
     , initialize : function(){
       
         this.grid = new MovieGrid({ model: this.model });
-        this.detail = new MovieDetail;
+        this.detail = new MovieDetail({ model: this.model.first() });
         
       }
       
-    , render: function(){    
-        $( this.grid.render().el ).appendTo( this.el ); 
+    , render: function(){
+        $( this.grid.render().el ).appendTo( this.el ).show();
       }
 
     });
@@ -422,45 +430,57 @@ there are no theaters showing that movie, the times are missing, etc)
 
 
 // The FNF controller is the 'main' controller for application.
-// Backbone controllers are essentially a convenience to keep
-// track of the hash fragment of the URL and dispatch accordingly.
+// Backbone controllers also offer the convenience of keeping
+// track of the hash fragment in the browser url and dispatch accordingly.
+// This is great because it offers a shortcut; by following a 
+// hash fragment url stored in an anchor, for example, a view can
+// effectively trigger an action on the controller. The detail
+// view works this way.
 
   var FNF = Backbone.Controller.extend({
 
     routes: {
         '/flicks'          : 'flicks'
       , '/flicks/:flick'   : 'detail'
-      , '/soirees/:soiree' : 'soiree'
+      //, '/soirees/:soiree' : 'soiree'
     }
 
   , flicks: function(){ 
       
-      this.app.detail.close();
+      this.app.detail.hide();
     
     }
 
   , detail: function( id ){
+
+// Backbone collections have a *get* method that is very useful.
+// If the models that you have in it have an attribute called *id*, get
+// will fetch the model with that id. The id came from the route we 
+// have defined in the controller options (/:flick)
+      var movie = this.movies.get( id );
       
-      var movie = this.movies.get( id )
-        
-      if (!movie.detailed){ 
-        movie.fetch({ success: _.bind(this.detail, this) });
-        return;
-      }
+      this.app.detail.remove();
+      this.app.detail = new MovieDetail({ model: movie });
+      this.app.detail.show();
       
-      movie.set('state', 'detail');
+      movie.showDetail();
+    }
+    
+  , soiree: function( id ){
+      
+      this.soiree.id = id;
+      this.soiree.fetch();
+    
     }
     
 // Starts the application
 // The 'movies' parameter is passed directly to this method
 // from the index.haml to bootstrap the application.
-
   , start: function( movies ){
 
-// Initialize a collection of movie models
-
-      this.movies = new Movies;
-
+      this.movies = new Movies( movies );
+      this.soiree = new Soiree;
+      
       this.app = new Application({ model: this.movies });
 
 // When the detail view is closed, reset the grid to its initial state
@@ -479,7 +499,7 @@ there are no theaters showing that movie, the times are missing, etc)
 
       });
       
-      this.movies.refresh( movies );
+      //this.movies.refresh( movies );
       this.app.render();
 
 // Backbone.history is what is used internally by the controllers.
