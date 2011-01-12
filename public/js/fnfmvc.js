@@ -324,9 +324,11 @@ there are no theaters showing that movie, the times are missing, etc)
           , today = TODAY.getDay()
           , j
           ;
-
+        
+        console.debug( 'RENDER :: ' ,movie.url() )
+        console.debug( movie.toJSON() )
         $( this.el ).html( this.tpl(movie.toJSON()) );
-
+        
         for (var i = 0; i < 7; i++){
           j = (today + i) % DAYS.length;
           
@@ -362,13 +364,13 @@ there are no theaters showing that movie, the times are missing, etc)
         
         $( this.el ).appendTo('body');      
         this.rendered = true;
-
+        console.log('end render')
         return this;
       }
 
   
     , show: function(){
-      
+        var movie = this.model;
         if (!this.rendered) this.render();      
     
         this.$('img').attr('src', movie.attributes.thumbnail );
@@ -458,12 +460,14 @@ there are no theaters showing that movie, the times are missing, etc)
 // will fetch the model with that id. The id came from the route we 
 // have defined in the controller options (/:flick)
       var movie = this.movies.get( id );
-      
+      console.log('detail', movie)
       this.app.detail.remove();
-      this.app.detail = new MovieDetail({ model: movie });
-      this.app.detail.show();
       
-      movie.showDetail();
+      
+      var detail = this.app.detail = new MovieDetail({ model: movie });
+      //{ success : function(){ detail.showDetail(); } }
+      //console.debug('DETAIL', movie)
+      movie.fetch( { success : function(){ detail.show(); } } );
     }
     
   , soiree: function( id ){
